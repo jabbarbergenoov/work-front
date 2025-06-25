@@ -7,17 +7,16 @@ import { motion } from "framer-motion";
 import { toast } from "sonner";
 
 const items = [
-  { title: "Главная панель", url: "#", icon: Home },
-  { title: "Курсы", url: "#", icon: Calendar },
-  { title: "О нас", url: "#", icon: Info },
+  { title: "Главная панель", url: "/", icon: Home },
+  { title: "Курсы", url: "/courses", icon: Calendar },
+  { title: "О нас", url: "/about", icon: Info },
   { title: "Настройки", url: "#", icon: Settings },
-  { title: "Связаться", url: "#", icon: Mail },
+  { title: "Связаться", url: "contact", icon: Mail },
 ];
 
 export function AppSidebar() {
   return (
     <>
-      {/* 🌅 Mobile Version — Dawn Gradient */}
       <div className="lg:hidden p-3">
         <Sheet>
           <SheetTrigger asChild>

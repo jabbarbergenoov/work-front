@@ -2,7 +2,7 @@
 
 import { useTheme } from 'next-themes'
 import Image from 'next/image'
-import { Contact, Moon, Sun } from "lucide-react"
+import { Contact, DoorOpen, Moon, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { AnimatePresence, motion } from "framer-motion"
 import {
@@ -31,12 +31,12 @@ export default function Header() {
           priority
         />
       </div>
-      
+
       <div className='flex items-center gap-3'>
         {/* Theme Toggle Button */}
         <Tooltip>
           <TooltipTrigger asChild>
-            <motion.div 
+            <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -56,7 +56,7 @@ export default function Header() {
                     transition={{ duration: 0.2 }}
                   >
                     {theme === 'dark' ? (
-                      <Sun className="h-5 w-5 text-amber-300" />
+                      <Sun className="h-5 w-5 text-gray-300" />
                     ) : (
                       <Moon className="h-5 w-5 text-indigo-600" />
                     )}
@@ -83,8 +83,8 @@ export default function Header() {
                 aria-label="Contact"
               >
                 <Link href={'/contact'}>
-                <Contact className="h-5 w-5 text-gray-700 dark:text-gray-300" />
-</Link>
+                  <Contact className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+                </Link>
               </Button>
             </motion.div>
           </TooltipTrigger>
@@ -92,6 +92,14 @@ export default function Header() {
             Контакты
           </TooltipContent>
         </Tooltip>
+
+        <Button
+          variant={"outline"}
+        >
+          <Link href={'/auth'} className='flex items-center gap-2'>
+            Вход <DoorOpen className="ml-2 h-4 w-4" />
+          </Link>
+        </Button>
       </div>
 
     </header>

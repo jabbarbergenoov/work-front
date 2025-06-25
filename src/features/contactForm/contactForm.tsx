@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label"
 
 export default function ContactForm() {
   return (
-    <Card className="max-w-2xl mx-auto">
+    <Card className="max-w-2xl mx-auto dark:bg-gray-800">
       <CardHeader>
         <CardTitle className="text-2xl font-bold text-center">
           Свяжитесь с нами
@@ -36,7 +36,8 @@ export default function ContactForm() {
         </div>
 
         <div className="space-y-4">
-          <div className="space-y-2">
+          <form action="https://formsubmit.co/bekbolatjabbarbergenov@gmail.com" method="POST">
+             <div className="space-y-2">
             <Label htmlFor="name">Ваше имя</Label>
             <Input id="name" placeholder="Например: Майкл Жордан" />
           </div>
@@ -51,6 +52,8 @@ export default function ContactForm() {
           <Button className="w-full" size="lg">
             Отправить
           </Button>
+          </form>
+       
         </div>
       </CardContent>
     </Card>
