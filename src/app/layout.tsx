@@ -1,12 +1,8 @@
+// app/layout.tsx (серверный)
 import type { Metadata } from "next";
 import { Roboto, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
-import { AdminSidebar } from "@/components/admin-sidebar"; // Новый компонент
-import Header from "@/components/header/header";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "sonner";
+import ClientLayout from "./client-layout"; // 👈 Импорт клиентской части
 
 const geistSans = Roboto({
   variable: "--font-geist-sans",
@@ -25,47 +21,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  params, // Добавляем params для определения типа пользователя
 }: {
   children: React.ReactNode;
-  params?: { dashboardType?: 'user' | 'admin' }; // Параметр для определения типа дашборда
 }) {
-  // Определяем тип дашборда (по умолчанию - пользовательский)
-  const dashboardType = params?.dashboardType || 'user';
-  const isAdminDashboard = dashboardType === 'admin';
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Toaster richColors position="top-right" />
-
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <SidebarProvider>
-            <div className="flex min-h-screen w-full">
-              {/* Условный рендеринг сайдбара */}
-              {isAdminDashboard ? (
-                <AdminSidebar />
-              ) : (
-                <AppSidebar />
-              )}
-
-              <div className={`flex flex-col flex-1 p-5 duration-300 ${isAdminDashboard
-                  ? 'bg-gray-100 dark:bg-gray-900/90'
-                  : 'dark:bg-gray-800/90'
-                }`}>
-                <Header isAdmin={isAdminDashboard} />
-                <main className="flex-1 p-5">
-                  {children}
-                </main>
-              </div>
-            </div>
-          </SidebarProvider>
-        </ThemeProvider>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );

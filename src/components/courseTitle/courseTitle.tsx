@@ -57,7 +57,7 @@ export default function CourseTitle() {
                         {/* Action Buttons */}
                         <div className="mt-8 flex gap-4">
                             <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                                <Link href={`dashboard/courses/${1}`} className="no-underline text-white">
+                                <Link href={`dashboard/${1}`} className="no-underline text-white">
                                     Kursga Yozilish
                                 </Link>
                             </button>
