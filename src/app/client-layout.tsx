@@ -3,11 +3,12 @@
 
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import  AdminSidebar from "@/components/AdminSidebar";
+import AdminSidebar from "@/components/AdminSidebar";
 import Header from "@/components/header/header";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
 import { usePathname } from "next/navigation";
+import LoadingProgress from "@/components/LoadingProgress";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -15,15 +16,15 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   return (
     <>
-      <Toaster richColors position="top-right" />
+      <Toaster richColors position="top-right" />  <LoadingProgress />
+
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
         <SidebarProvider>
           <div className="flex min-h-screen w-full">
             {isAdminDashboard ? <AdminSidebar /> : <AppSidebar />}
             <div
-              className={`flex flex-col flex-1 p-5 duration-300 ${
-                isAdminDashboard ? "bg-gray-100 dark:bg-gray-900/90" : "dark:bg-gray-800/90"
-              }`}
+              className={`flex flex-col flex-1 p-5 duration-300 ${isAdminDashboard ? "bg-gray-100 dark:bg-gray-900/90" : "dark:bg-gray-800/90"
+                }`}
             >
               <Header isAdmin={isAdminDashboard} />
               <main className="flex-1 p-5">{children}</main>

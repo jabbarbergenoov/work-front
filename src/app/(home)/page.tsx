@@ -6,11 +6,10 @@ import { FaReact } from 'react-icons/fa'
 export default function HomePage() {
   return (
     <div className=" flex items-center justify-center ">
-      <Card className="w-full "> {/* Увеличил максимальную ширину */}
-        <div className="flex flex-row items-stretch"> {/* Основной контейнер flex */}
-          {/* Левая часть с контентом */}
-          <div className="flex-1 p-6"> {/* flex-1 для растягивания */}
-            <CardHeader className="text-left space-y-2"> {/* Выравнивание по левому краю */}
+      <Card className="w-full "> 
+        <div className="flex flex-row items-stretch"> 
+          <div className="flex-1 p-6"> 
+            <CardHeader className="text-left space-y-2"> 
               <CardTitle className="text-2xl font-bold">Добро пожаловать в TECHFLOW!</CardTitle>
             </CardHeader>
 

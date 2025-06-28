@@ -3,7 +3,7 @@ import { Import } from "lucide-react";
 
 // Create Axios instance
 export const axiosInstance = axios.create({
-    baseURL : process.env.NEXT_PUBLIC_BASE_URL,
+    baseURL: process.env.NEXT_PUBLIC_BASE_URL,
     headers: {
         'Content-Type': 'application/json',
     },
@@ -39,8 +39,8 @@ axiosInstance.interceptors.response.use(
             try {
                 const refreshToken = localStorage.getItem('refreshToken'); // Retrieve the stored refresh token.
                 // Make a request to your auth server to refresh the token.
-                const response = await axios.get('https://social-backend-kzy5.onrender.com/auth/refresh', {
-                    headers: { Authorization: `Bearer ${refreshToken}` }
+                const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/refresh`, {
+                    refreshToken, // теперь отправляется в теле запроса
                 });
                 const accessToken = response.data.accessToken;
                 console.log(accessToken);
@@ -55,7 +55,7 @@ axiosInstance.interceptors.response.use(
                 console.error('Token refresh failed:', refreshError);
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('refreshToken');
-                window.location.href = '/login';
+                window.location.href = '/auth';
                 return Promise.reject(refreshError);
             }
         }

@@ -2,7 +2,7 @@
 
 import { useTheme } from 'next-themes'
 import Image from 'next/image'
-import { Contact, DoorOpen, Moon, Sun } from "lucide-react"
+import { Contact, DoorOpen, Moon, Sun, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { AnimatePresence, motion } from "framer-motion"
 import {
@@ -11,13 +11,29 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export default function Header() {
   const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+  const [token, setToken] = useState<string | null>(null)
+
+  useEffect(() => {
+    setMounted(true)
+    setToken(localStorage.getItem('accessToken'))
+  }, [])
 
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark')
   }
+
+  if (!mounted) return null
 
   return (
     <header className='w-full flex items-center justify-between px-6 py-3 bg-white/80 dark:bg-gray-900/30 rounded-xl backdrop-blur-sm border border-gray-200 dark:border-gray-700 shadow-sm'>
@@ -93,15 +109,46 @@ export default function Header() {
           </TooltipContent>
         </Tooltip>
 
-        <Button
-          variant={"outline"}
-        >
-          <Link href={'/auth'} className='flex items-center gap-2'>
-            Вход <DoorOpen className="ml-2 h-4 w-4" />
-          </Link>
-        </Button>
+        {token ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full w-10 h-10 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+              >
+                <User className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+        
+              <DropdownMenuItem asChild>
+                <Link href="/settings" className="w-full cursor-pointer">
+                  Настройки
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-red-500 focus:text-red-500 focus:bg-red-50 dark:focus:bg-red-900/20"
+                onClick={() => {
+                  localStorage.removeItem('accessToken')
+                  window.location.reload()
+                }}
+              >
+                Выйти
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Button
+            variant={"outline"}
+            className="flex items-center gap-2"
+          >
+            <Link href={'/auth'} className='flex items-center gap-2'>
+              Вход <DoorOpen className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+        )}
       </div>
-
     </header>
   )
 }
