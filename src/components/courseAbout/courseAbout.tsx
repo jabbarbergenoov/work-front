@@ -2,18 +2,11 @@ import React from 'react'
 import { Card } from '../ui/card'
 import { CheckCircle } from 'lucide-react'
 
-export default function CourseAbout() {
-    const topics = [
-        "Class component",
-        "Function component",
-        "Hooklar",
-        "Custom hooklar",
-        "API bilan ishlash",
-        "Redux",
-        "Redux toolkit",
-        "Amaliy loyihalar"
-    ]
+export default function CourseAbout({ data }: { data: any }) {
+    const courseData = Array.isArray(data) ? data[0] : data;
 
+    const topics = courseData?.organish || []
+    
     return (
         <Card className="p-6 rounded-lg shadow-sm mt-5">
             <h1 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">
@@ -31,7 +24,7 @@ export default function CourseAbout() {
                 ))}
             </div>
 
-        
+
         </Card>
     )
 }

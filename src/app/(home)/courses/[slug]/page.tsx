@@ -11,6 +11,7 @@ import { Terminal } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
 import AddSlugData from '@/modals/addSlugData';
+import EditSlugData from '@/modals/EditSlugData';
 
 interface Props {
   params: {
@@ -28,7 +29,8 @@ export default function CourseIdPage({ params: paramsPromise }: Props) {
   const params = use(paramsPromise);
   const [user, setUser] = useState<User | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-
+  const [iEdit, setIsdit] = useState(false);
+  const [onEdit, setOnEdit] = useState<string>('');
   useEffect(() => {
     // Безопасное получение пользователя из localStorage
     try {
@@ -42,7 +44,12 @@ export default function CourseIdPage({ params: paramsPromise }: Props) {
   }, []);
 
   const { data, error, loading } = useFetch(`/slugdatas?slugData=${params.slug}`);
-
+  useEffect(() => {
+    if (data) {
+      setOnEdit(data);
+    }
+  }, [data]);
+  
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8 space-y-8">
@@ -96,7 +103,7 @@ export default function CourseIdPage({ params: paramsPromise }: Props) {
             </Button>
           )}
         </div>
-        <AddSlugData setIsOpen={setIsOpen} isOpen={isOpen} />
+        <AddSlugData slug={params.slug} setIsOpen={setIsOpen} isOpen={isOpen} />
       </div>
     );
   }
@@ -115,24 +122,19 @@ export default function CourseIdPage({ params: paramsPromise }: Props) {
         </Alert>
       )}
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
-        <CourseTitle />
-      </div>
+      <CourseTitle data={data} />
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
-        <CourseAbout />
-      </div>
+      <CourseAbout data={data} />
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">Модули курса</h2>
-        <CourseModules />
-      </div>
+      <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">Модули курса</h2>
+      <CourseModules data={data} />
 
       {isAdmin && (
         <div className="flex justify-end">
-          <Button variant="default" className="bg-green-600 hover:bg-green-700">
+          <Button onClick={() => setIsdit(true)} variant="default" className="bg-green-600 hover:bg-green-700">
             Редактировать курс
           </Button>
+          <EditSlugData isOpen={iEdit} setIsOpen={setIsdit} slug={onEdit} />
         </div>
       )}
 

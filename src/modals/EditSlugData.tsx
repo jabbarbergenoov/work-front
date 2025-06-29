@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { axiosInstance } from '@/shared/api';
 
@@ -28,11 +28,14 @@ const formSchema = z.object({
     ),
 });
 
-export default function AddSlugData({ isOpen, setIsOpen, slug }: { slug: string; isOpen: boolean; setIsOpen: (open: boolean) => void }) {
+export default function EditSlugData({ isOpen, setIsOpen, slug }: { slug: string; isOpen: boolean; setIsOpen: (open: boolean) => void }) {
     const [isLoading, setIsLoading] = useState(false);
     const [modules, setModules] = useState<Array<{ id: string; title: string }>>([{ id: '', title: '' }]);
     const [organish, setOrganish] = useState<string[]>([]);
     const [currentOrganish, setCurrentOrganish] = useState('');
+
+
+
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -45,7 +48,21 @@ export default function AddSlugData({ isOpen, setIsOpen, slug }: { slug: string;
         },
     });
 
-    const handleAddModule = () => {
+    useEffect(() => {
+        if (slug && isOpen) {
+            form.reset({
+                name: slug.name || '',
+                description: slug.description || '',
+                dars: slug.dars || '',
+                organish: slug.organish || [],
+                modules: slug.modules || []
+            });
+            setModules(slug.modules || []);
+            setOrganish(slug.organish || []);
+        }
+    }, [isOpen, slug, form]);
+
+    const handleEditModule = () => {
         setModules([...modules, { id: '', title: '' }]);
     };
 
@@ -55,7 +72,7 @@ export default function AddSlugData({ isOpen, setIsOpen, slug }: { slug: string;
         setModules(newModules);
     };
 
-    const handleAddOrganish = () => {
+    const handleEditOrganish = () => {
         if (currentOrganish.trim()) {
             setOrganish([...organish, currentOrganish]);
             setCurrentOrganish('');
@@ -90,7 +107,7 @@ export default function AddSlugData({ isOpen, setIsOpen, slug }: { slug: string;
             formData.append('slug', slug);
 
             // Отправка данных на сервер
-            const response = await axiosInstance.post('/slugdatas', formData, {
+            const response = await axiosInstance.put(`/slugdatas/${slug}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -200,7 +217,7 @@ export default function AddSlugData({ isOpen, setIsOpen, slug }: { slug: string;
                             <Button
                                 type="button"
                                 variant="outline"
-                                onClick={handleAddModule}
+                                onClick={handleEditModule}
                                 className="mt-2"
                             >
                                 Добавить модуль
@@ -219,7 +236,7 @@ export default function AddSlugData({ isOpen, setIsOpen, slug }: { slug: string;
                                 <Button
                                     type="button"
                                     variant="outline"
-                                    onClick={handleAddOrganish}
+                                    onClick={handleEditOrganish}
                                 >
                                     Добавить
                                 </Button>
